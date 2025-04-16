@@ -15,7 +15,7 @@ Imports System.Reflection
 <Assembly: System.Reflection.AssemblyCompanyAttribute("tableau"),  _
  Assembly: System.Reflection.AssemblyConfigurationAttribute("Debug"),  _
  Assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0"),  _
- Assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0"),  _
+ Assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9d695bb265a4d653ccc37ca4efd5523700eed304"),  _
  Assembly: System.Reflection.AssemblyProductAttribute("tableau"),  _
  Assembly: System.Reflection.AssemblyTitleAttribute("tableau"),  _
  Assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0"),  _

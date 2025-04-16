@@ -14,6 +14,6 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = tableau
-build_property.ProjectDir = D:\ITU\s4\progTahina\vb\tableau\
+build_property.ProjectDir = D:\ITU\s4\progTahina\vb\tableau_git\Tableau-de-bord-vb\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 

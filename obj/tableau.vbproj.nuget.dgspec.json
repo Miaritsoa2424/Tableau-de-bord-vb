@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\ITU\\s4\\progTahina\\vb\\tableau\\tableau.vbproj": {}
+    "D:\\ITU\\s4\\progTahina\\vb\\tableau_git\\Tableau-de-bord-vb\\tableau.vbproj": {}
   },
   "projects": {
-    "D:\\ITU\\s4\\progTahina\\vb\\tableau\\tableau.vbproj": {
+    "D:\\ITU\\s4\\progTahina\\vb\\tableau_git\\Tableau-de-bord-vb\\tableau.vbproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\ITU\\s4\\progTahina\\vb\\tableau\\tableau.vbproj",
+        "projectUniqueName": "D:\\ITU\\s4\\progTahina\\vb\\tableau_git\\Tableau-de-bord-vb\\tableau.vbproj",
         "projectName": "tableau",
-        "projectPath": "D:\\ITU\\s4\\progTahina\\vb\\tableau\\tableau.vbproj",
+        "projectPath": "D:\\ITU\\s4\\progTahina\\vb\\tableau_git\\Tableau-de-bord-vb\\tableau.vbproj",
         "packagesPath": "C:\\Users\\miari\\.nuget\\packages\\",
-        "outputPath": "D:\\ITU\\s4\\progTahina\\vb\\tableau\\obj\\",
+        "outputPath": "D:\\ITU\\s4\\progTahina\\vb\\tableau_git\\Tableau-de-bord-vb\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\miari\\AppData\\Roaming\\NuGet\\NuGet.Config"

@@ -156,6 +156,22 @@ Public Class Voiture
         Return vitesse
     End Function
 
+    Public Function AccelererByAccel(acceleration As Double, duree As Double,vitesseInit As Double)
+        Dim pourcentage As Double = acceleration / Me.Acceleration
+        Dim conso As Double = Me.Consommation * pourcentage
+        If acceleration > 0 Then
+            Me.Carburant -= (conso * duree)
+        End If
+            
+        Dim vitesse As Double = acceleration * duree + vitesseInit
+        If vitesse < 0 Then
+            Return -0.1
+        End If
+
+        Return vitesse
+    End Function
+ 
+
     Public Function ConsommationMoyenne(distanceParcourue As Double) As Double
         If distanceParcourue <= 0 Then
             Return 0

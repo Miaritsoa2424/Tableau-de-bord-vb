@@ -1,4 +1,5 @@
 INSERT INTO voiture (marque, acceleration, deceleration, consommation, carburant,carburant_max, v_max) VALUES
+('Peugeot 405 Mi16', 50, 20, 0.05, 1,1, 300),
 ('Peugeot', 8.5, 7.2, 6.5, 80.0,80, 180.0),
 ('Renault', 9.0, 6.8, 7.0, 80.0,80, 190.0),
 ('Toyota', 7.5, 6.5, 5.8, 80.0,80, 170.0),

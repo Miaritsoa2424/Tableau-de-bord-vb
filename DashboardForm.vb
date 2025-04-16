@@ -9,15 +9,18 @@ Public Class DashboardForm
     Public indexVoitureActuelle As Integer = 1
     Public Voiture As Voiture ' Instance de la classe Voiture
 
+
     ' Couleurs personnalisées
     Private ReadOnly couleurFond As Color = Color.FromArgb(30, 30, 40)
     Private ReadOnly couleurCadran As Color = Color.FromArgb(60, 60, 70)
     Private ReadOnly couleurAiguille As Color = Color.FromArgb(220, 50, 50)
     Private ReadOnly couleurTexte As Color = Color.WhiteSmoke
     Private clavier As ClavierControl
+    Private heureActuelle As String = DateTime.Now.ToString("HH:mm:ss")
 
 
     Public timer As Timer
+    Public replay As Boolean = False
     Public newValue As Double = 0 ' La variable à partager
     Public acceleration As Double = 0
     Public upPressed As Boolean = False
@@ -47,31 +50,72 @@ Public Class DashboardForm
     Private Sub Timer_Tick(sender As Object, e As EventArgs)
         ' Simulation de changement de vitesse et de carburant
         Dim currentTime = DateTime.Now
+        heureActuelle = DateTime.Now.ToString("HH:mm:ss")
         Dim deltaTime = CSng((currentTime - lastTickTime).TotalSeconds) ' Temps écoulé en secondes
         lastTickTime = currentTime ' Mémorisez pour le prochain tick
 
-        acceleration = newValue * Voiture.Acceleration
-        If newValue < 0 Then 
-            acceleration = newValue * Voiture.Deceleration
+        If(Not replay) Then
+            acceleration = newValue * Voiture.Acceleration
+            If newValue < 0 Then 
+                acceleration = newValue * Voiture.Deceleration
+            End If
+
+            If voiture.Carburant <= 0 And newValue > 0 Then
+                voiture.Carburant = 0.0F
+                newValue = 0.0F
+            End If
+
+            If vitesse < 0.0F Then 
+                vitesse = 0.0F
+                newValue = 0.0F
+            End If
+
+            If vitesse > Voiture.V_max Then
+                vitesse = Voiture.V_max
+                newValue = 0.0F
+            End If
+
+            distanceParcourue += (1/2)* acceleration * (10.0 / 36.0) * deltaTime * deltaTime + vitesse * (10.0 / 36.0) * deltaTime
+            vitesse = Voiture.Accelerer(newValue,deltaTime,vitesse)  ' Utiliser la nouvelle valeur pour ajuster la vitesse
+        Else
+            Static indexEvent As Integer = 0
+            Static dureeActuel As Double = 0.0
+            Static dureeEvent As Double = 0.0
+            Static evenements As List(Of Evenement) = EvenementDao.GetAllByIdVoiture(Voiture.Id)
+
+            ' Recommencer si on arrive à la fin
+            If indexEvent >= evenements.Count - 1 Then
+                timer.Stop()
+            End If
+
+            ' Récupération des événements courant et suivant
+            Dim evt As Evenement = evenements(indexEvent)
+            If(indexEvent + 1 >= evenements.Count) Then
+                ' Si on est à la fin, on ne peut pas accéder à l'événement suivant
+                timer.Stop()
+                MessageBox.Show("Fin de l'animation")
+                Return
+            End If
+            Dim evtSuiv As Evenement = evenements(indexEvent + 1)
+
+            If dureeActuel = 0.0 Then
+                vitesse = evt.VInit
+                dureeEvent = (evtSuiv.DateEvenement - evt.DateEvenement).TotalSeconds
+            End If
+
+            ' Même calcul que dans le mode normal
+            vitesse = voiture.AccelererByAccel(evt.Acceleration,deltaTime,vitesse)
+            distanceParcourue += (1/5) * evt.Acceleration * (10.0 / 36.0) * deltaTime * deltaTime + vitesse * (10.0 / 36.0) * deltaTime
+            Console.WriteLine(distanceParcourue)
+
+            dureeActuel += deltaTime
+
+            If dureeActuel >= dureeEvent Then
+                indexEvent += 1
+                dureeActuel = 0.0
+            End If
         End If
 
-        If voiture.Carburant <= 0 And newValue > 0 Then
-            voiture.Carburant = 0.0F
-            newValue = 0.0F
-        End If
-
-        If vitesse < 0.0F Then 
-            vitesse = 0.0F
-            newValue = 0.0F
-        End If
-
-        If vitesse > Voiture.V_max Then
-            vitesse = Voiture.V_max
-            newValue = 0.0F
-        End If
-
-        distanceParcourue += (1/2)* acceleration * (10.0 / 36.0) * deltaTime * deltaTime + vitesse * (10.0 / 36.0) * deltaTime
-        vitesse = Voiture.Accelerer(newValue,deltaTime,vitesse)  ' Utiliser la nouvelle valeur pour ajuster la vitesse
 
         Me.Invalidate() ' Redessiner le formulaire
     End Sub
@@ -87,6 +131,10 @@ Public Class DashboardForm
         Using brush As New SolidBrush(couleurFond)
             g.FillRectangle(brush, ClientRectangle)
         End Using
+
+        ' Afficher l'horloge
+        DessinerHorloge(g, New Point(600, 250))
+
 
         ' Dessiner le compteur de vitesse analogique
         DessinerCompteurVitesse(g, New Rectangle(100, 100, 300, 300), vitesse, 0, Voiture.V_max)
@@ -112,6 +160,13 @@ Public Class DashboardForm
     Private Sub BtnStart_Click(sender As Object, e As EventArgs)
         timer.Start()
         Me.Focus() ' Reprendre le focus aussi
+    End Sub
+
+    Private Sub DessinerHorloge(g As Graphics, position As Point)
+        Dim heureActuelle As String = DateTime.Now.ToString("HH:mm:ss")
+        Dim fontHorloge As New Font("Segoe UI", 16, FontStyle.Bold)
+        Dim brushHorloge As New SolidBrush(Color.White)
+        g.DrawString(heureActuelle, fontHorloge, brushHorloge, position)
     End Sub
 
     
