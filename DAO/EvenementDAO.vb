@@ -23,6 +23,69 @@ Public Class EvenementDao
         End Try
     End Sub
 
+    Public Shared Function GetAll() As List(Of Evenement)
+        Dim conn As MySqlConnection = Nothing
+        Dim evenements As New List(Of Evenement)()
+        Try
+            conn = Database.GetConnection()
+            Dim sql As String = "SELECT * FROM evenement"
+            Using cmd As New MySqlCommand(sql, conn)
+                Using reader As MySqlDataReader = cmd.ExecuteReader()
+                    While reader.Read()
+                        Dim evenement As New Evenement(
+                            reader.GetInt32("id_event"),
+                            reader.GetInt32("id_voiture"),
+                            reader.GetDouble("acceleration"),
+                            reader.GetDouble("v_init"),
+                            reader.GetDateTime("date")
+                        )
+                        evenements.Add(evenement)
+                    End While
+                End Using
+            End Using
+        Catch ex As MySqlException
+            Throw New Exception("Erreur lors de la récupération des évènements : " & ex.Message)
+        Catch ex As Exception
+            Throw New Exception("Erreur inattendue pendant la récupération : " & ex.Message)
+        Finally
+            Database.CloseConnection(conn)
+        End Try
+        Return evenements
+    End Function
+
+    Public Shared Function GetAllByIdVoiture(idVoiture As Integer) As List(Of Evenement)
+        Dim conn As MySqlConnection = Nothing
+        Dim evenements As New List(Of Evenement)()
+        Try
+            conn = Database.GetConnection()
+            Dim sql As String = "SELECT * FROM evenement WHERE id_voiture = @id_voiture"
+            Using cmd As New MySqlCommand(sql, conn)
+                cmd.Parameters.AddWithValue("@id_voiture", idVoiture)
+                Using reader As MySqlDataReader = cmd.ExecuteReader()
+                    While reader.Read()
+                        Dim evenement As New Evenement(
+                            reader.GetInt32("id_event"),
+                            reader.GetInt32("id_voiture"),
+                            reader.GetDouble("acceleration"),
+                            reader.GetDouble("v_init"),
+                            reader.GetDateTime("date")
+                        )
+                        evenements.Add(evenement)
+                    End While
+                End Using
+            End Using
+        Catch ex As MySqlException
+            Throw New Exception("Erreur lors de la récupération des évènements : " & ex.Message)
+        Catch ex As Exception
+            Throw New Exception("Erreur inattendue pendant la récupération : " & ex.Message)
+        Finally
+            Database.CloseConnection(conn)
+        End Try
+
+        ' Tri croissant par date
+        Return evenements.OrderBy(Function(ev) ev.DateEvenement).ToList()
+    End Function
+
     ' Récupérer un évènement par ID
     Public Shared Function GetById(id As Integer) As Evenement
         Dim conn As MySqlConnection = Nothing

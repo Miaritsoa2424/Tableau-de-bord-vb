@@ -32,7 +32,15 @@ Public Class ClavierControl
             dashboard.upPressed = False
         ' Vérification de la touche S pour stoper l'animation
         ElseIf e.KeyCode = Keys.S Then
+            shouldSave = True
             dashboard.timer.Stop()
+        ElseIf e.KeyCode = Keys.R Then
+            ' Reprendre l'animation
+            dashboard.timer.Start()
+            dashboard.acceleration = 0
+            dashboard.vitesse = 0
+            dashboard.distanceParcourue = 0
+            dashboard.replay = True
         ' Vérification de la touche 0
         ElseIf e.KeyCode = Keys.D0 Then
             dashboard.newValue = 0
